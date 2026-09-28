@@ -1,0 +1,56 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Polhem.Northwind.Server",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-northwind-server",
+      "program": "${workspaceFolder}/Polhem.Northwind.Server/bin/Debug/net10.0/Polhem.Northwind.Server.dll",
+      "cwd": "${workspaceFolder}/Polhem.Northwind.Server",
+      "console": "integratedTerminal",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "//justMyCode": "false so the debugger does not break on UserMessageException — a deliberate business-rule exception (e.g. 'Order details are locked') thrown in a BO and caught by the framework's JsonRpc layer. It is handled; the client receives a friendly message.",
+      "justMyCode": false
+    },
+    {
+      "name": "Run Polhem.Northwind.Desktop",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "prep-northwind-desktop",
+      "program": "${workspaceFolder}/Polhem.Northwind.Desktop/bin/Debug/net10.0/Polhem.Northwind.Desktop.dll",
+      "cwd": "${workspaceFolder}/Polhem.Northwind.Desktop",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "//": "Web (Avalonia WASM) head. blazorwasm is the .NET WebAssembly debug type — it builds and runs the WasmAppHost dev server (http://localhost:5200) and attaches the C# debugger through the /_framework/debug proxy, so breakpoints in the shared Polhem.Northwind.UI hit in the browser. Needs the wasm-tools workload. Run the backend first — use the 'Server + Web' compound.",
+      "name": "Run Polhem.Northwind.Browser (WASM)",
+      "type": "blazorwasm",
+      "request": "launch",
+      "preLaunchTask": "prep-northwind-browser",
+      "cwd": "${workspaceFolder}/Polhem.Northwind.Browser",
+      "url": "http://localhost:5200"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Run Polhem.Northwind (Server + Desktop)",
+      "configurations": [
+        "Run Polhem.Northwind.Server",
+        "Run Polhem.Northwind.Desktop"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "Run Polhem.Northwind (Server + Web)",
+      "configurations": [
+        "Run Polhem.Northwind.Server",
+        "Run Polhem.Northwind.Browser (WASM)"
+      ],
+      "stopAll": true
+    }
+  ]
+}

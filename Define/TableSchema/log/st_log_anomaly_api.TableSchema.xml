@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableSchema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" DbName="log" TableName="st_log_anomaly_api" DisplayName="API Anomaly Log">
+	<Fields>
+		<DbField FieldName="sys_no" Caption="Sequence No." DbType="AutoIncrement" />
+		<DbField FieldName="sys_rowid" Caption="Row Id" DbType="Guid" />
+		<DbField FieldName="log_time" Caption="Event Time" DbType="DateTime" />
+		<DbField FieldName="user_id" Caption="User Id" DbType="String" Length="50" AllowNull="true" />
+		<DbField FieldName="user_name" Caption="User Name" DbType="String" Length="100" AllowNull="true" />
+		<DbField FieldName="company_id" Caption="Company Id" DbType="String" Length="50" AllowNull="true" />
+		<DbField FieldName="company_name" Caption="Company Name" DbType="String" Length="100" AllowNull="true" />
+		<DbField FieldName="token_fingerprint" Caption="Token Fingerprint" DbType="String" Length="16" AllowNull="true" />
+		<DbField FieldName="trace_id" Caption="Trace Id" DbType="Guid" AllowNull="true" />
+		<DbField FieldName="client_ip" Caption="Client IP" DbType="String" Length="45" AllowNull="true" />
+		<DbField FieldName="source" Caption="Source" DbType="String" Length="100" AllowNull="true" />
+		<DbField FieldName="api_key_id" Caption="API Key Id" DbType="String" Length="50" AllowNull="true" />
+		<DbField FieldName="api_key_name" Caption="Application Name" DbType="String" Length="100" AllowNull="true" />
+		<DbField FieldName="method" Caption="Method" DbType="String" Length="100" />
+		<DbField FieldName="anomaly_kind" Caption="Anomaly Kind" DbType="Integer" />
+		<DbField FieldName="elapsed_ms" Caption="Elapsed (ms)" DbType="Integer" />
+		<DbField FieldName="threshold_ms" Caption="Threshold (ms)" DbType="Integer" AllowNull="true" />
+		<DbField FieldName="error_type" Caption="Error Type" DbType="String" Length="200" AllowNull="true" />
+		<DbField FieldName="error_message" Caption="Error Message" DbType="Text" AllowNull="true" />
+	</Fields>
+	<Indexes>
+		<DbTableIndex Name="pk_{0}" Unique="true" PrimaryKey="true">
+			<IndexFields>
+				<IndexField FieldName="sys_no" />
+			</IndexFields>
+		</DbTableIndex>
+		<DbTableIndex Name="rx_{0}" Unique="true">
+			<IndexFields>
+				<IndexField FieldName="sys_rowid" />
+			</IndexFields>
+		</DbTableIndex>
+		<DbTableIndex Name="ix_st_log_anomaly_api_kind">
+			<IndexFields>
+				<IndexField FieldName="anomaly_kind" />
+			</IndexFields>
+		</DbTableIndex>
+	</Indexes>
+</TableSchema>

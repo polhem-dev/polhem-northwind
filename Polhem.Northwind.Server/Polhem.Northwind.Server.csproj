@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Polhem.Northwind.Server</RootNamespace>
+    <AssemblyName>Polhem.Northwind.Server</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <!--
+    Wiring for the framework convention analyzers (POLHEM1xxx / POLHEM2xxx), which check this
+    application's real definition files at build time.
+
+    The analyzer and the targets that hand it the definition files ship in the Polhem.Definition
+    package, the targets under buildTransitive/, so they also reach a project that pulls
+    Polhem.Definition in only transitively. The explicit reference is kept because this project names
+    the dependency it actually compiles against.
+
+    PolhemDefinitionFilesGlob says where the definitions actually are. The glob those targets inject
+    is rooted at the project directory, so that a multi-project solution does not rescan the same tree
+    once per project; this solution keeps its definitions at the root, one level up. Without it the
+    analyzer finds no definition files and reports nothing, and the build stays green.
+  -->
+  <PropertyGroup>
+    <PolhemDefinitionFilesGlob>..\Define\**\*.xml</PolhemDefinitionFilesGlob>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Polhem.Definition" Version="1.0.0" />
+    <PackageReference Include="Polhem.Api.AspNetCore" Version="1.0.0" />
+    <PackageReference Include="Polhem.Business" Version="1.0.0" />
+    <PackageReference Include="Polhem.Db" Version="1.0.0" />
+    <PackageReference Include="Polhem.Hosting" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.4" />
+    <!-- Force SQLitePCLRaw native bundle to 3.x (non-vulnerable SQLite engine); the 2.1.x
+         line carries advisory GHSA-2m69-gcr7-jv3q with no 2.x patch. -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Northwind seed subset read by NorthwindSchemaSeeder at first run. The Web SDK
+         already globs these as Content; only override the copy-to-output behaviour. -->
+    <Content Update="SeedData\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
