@@ -14,6 +14,11 @@ on:
   workflow_dispatch:
 
 jobs:
+  # IMPORTANT: The two job names below ("Build (Server / UI / Desktop / Browser / Android)" and
+  # "Build (iOS)") are the required status checks of the branch protection on `main`. Renaming a
+  # job means changing the protection in the same step; otherwise every pull request waits for a
+  # check that no longer reports.
+  #
   # Everything except the iOS head. Debug is deliberate: it is what the README tells a reader to run.
   build:
     name: Build (Server / UI / Desktop / Browser / Android)
