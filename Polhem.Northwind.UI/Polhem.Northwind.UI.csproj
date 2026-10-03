@@ -17,7 +17,7 @@
     <PackageReference Include="Semi.Avalonia" Version="12.0.3" />
     <PackageReference Include="Semi.Avalonia.DataGrid" Version="12.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
-    <PackageReference Include="Polhem.UI.Avalonia" Version="1.1.0" />
+    <PackageReference Include="Polhem.UI.Avalonia" Version="1.2.0" />
   </ItemGroup>
 
 </Project>

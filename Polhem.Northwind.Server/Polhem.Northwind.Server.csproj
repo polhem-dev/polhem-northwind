@@ -29,11 +29,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polhem.Definition" Version="1.1.0" />
-    <PackageReference Include="Polhem.Api.AspNetCore" Version="1.1.0" />
-    <PackageReference Include="Polhem.Business" Version="1.1.0" />
-    <PackageReference Include="Polhem.Db" Version="1.1.0" />
-    <PackageReference Include="Polhem.Hosting" Version="1.1.0" />
+    <PackageReference Include="Polhem.Definition" Version="1.2.0" />
+    <PackageReference Include="Polhem.JsonRpc.AspNetCore" Version="1.0.0" />
+    <PackageReference Include="Polhem.Business" Version="1.2.0" />
+    <PackageReference Include="Polhem.Db" Version="1.2.0" />
+    <PackageReference Include="Polhem.Hosting" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
