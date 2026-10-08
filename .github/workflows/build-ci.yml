@@ -51,21 +51,21 @@ jobs:
     # Built one at a time rather than through the solution so a failure names the head that broke.
     # Server / UI / Desktop / Browser set TreatWarningsAsErrors, so any warning fails the run.
     - name: Build Server
-      run: dotnet build Polhem.Northwind.Server/Polhem.Northwind.Server.csproj -c Debug
+      run: dotnet build src/Polhem.Northwind.Server/Polhem.Northwind.Server.csproj -c Debug
 
     - name: Build UI
-      run: dotnet build Polhem.Northwind.UI/Polhem.Northwind.UI.csproj -c Debug
+      run: dotnet build src/Polhem.Northwind.UI/Polhem.Northwind.UI.csproj -c Debug
 
     - name: Build Desktop
-      run: dotnet build Polhem.Northwind.Desktop/Polhem.Northwind.Desktop.csproj -c Debug
+      run: dotnet build src/Polhem.Northwind.Desktop/Polhem.Northwind.Desktop.csproj -c Debug
 
     - name: Build Browser (WASM)
-      run: dotnet build Polhem.Northwind.Browser/Polhem.Northwind.Browser.csproj -c Debug
+      run: dotnet build src/Polhem.Northwind.Browser/Polhem.Northwind.Browser.csproj -c Debug
 
     # No TreatWarningsAsErrors here: trim analysis emits IL2026 / IL2057 / IL2104 for the
     # framework's reflection-based serialization, which the csproj documents as expected.
     - name: Build Android
-      run: dotnet build Polhem.Northwind.Android/Polhem.Northwind.Android.csproj -c Debug
+      run: dotnet build src/Polhem.Northwind.Android/Polhem.Northwind.Android.csproj -c Debug
 
     # A build-only gate cannot see seeding defects. The seeder inserts each table under one
     # transaction because its idempotence gate skips any table that already holds a row: a partial
@@ -73,7 +73,7 @@ jobs:
     # non-empty table. That shipped once, leaving ft_order_detail with 11 of its 12 rows. These
     # assertions are what catches it.
     - name: Smoke — start server and verify seeded data
-      working-directory: Polhem.Northwind.Server
+      working-directory: src/Polhem.Northwind.Server
       run: |
         set -euo pipefail
 
@@ -161,7 +161,7 @@ jobs:
       run: dotnet workload install ios --version 10.0.401
 
     - name: Restore
-      run: dotnet restore Polhem.Northwind.iOS/Polhem.Northwind.iOS.csproj
+      run: dotnet restore src/Polhem.Northwind.iOS/Polhem.Northwind.iOS.csproj
 
     # .NET for iOS requires one exact Xcode major.minor and fails the build outright against any
     # other. That version is not written down here: the SDK declares it as _RecommendedXcodeVersion,
@@ -174,7 +174,7 @@ jobs:
       run: |
         set -euo pipefail
 
-        required=$(dotnet msbuild Polhem.Northwind.iOS/Polhem.Northwind.iOS.csproj \
+        required=$(dotnet msbuild src/Polhem.Northwind.iOS/Polhem.Northwind.iOS.csproj \
           -getProperty:_RecommendedXcodeVersion -p:ValidateXcodeVersion=false | tr -d '[:space:]')
 
         if [ -z "$required" ]; then
@@ -196,4 +196,4 @@ jobs:
         exit 1
 
     - name: Build iOS
-      run: dotnet build Polhem.Northwind.iOS/Polhem.Northwind.iOS.csproj -c Debug --no-restore
+      run: dotnet build src/Polhem.Northwind.iOS/Polhem.Northwind.iOS.csproj -c Debug --no-restore

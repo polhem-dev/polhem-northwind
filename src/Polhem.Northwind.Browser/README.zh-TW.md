@@ -2,7 +2,7 @@
 
 [English](README.md) | **繁體中文**
 
-[Polhem.Northwind](../README.zh-TW.md) 示範的**網頁（WASM）head**。它以 **Avalonia Browser** 後端把共用的
+[Polhem.Northwind](../../README.zh-TW.md) 示範的**網頁（WASM）head**。它以 **Avalonia Browser** 後端把共用的
 `Polhem.Northwind.UI` Avalonia 應用程式編譯成 WebAssembly，並在瀏覽器中執行 —— 與
 [`Polhem.Northwind.Desktop`](../Polhem.Northwind.Desktop) 相同的 `App`、view model 與 view，只是換了一個平台 head
 （以 `.UseBrowser()` 取代 `.UseDesktop()`）。它是一個輕薄的 JSON-RPC 用戶端；後端是未經修改的
@@ -23,10 +23,10 @@ sudo dotnet workload install wasm-tools
 ```bash
 # 1. 後端（JSON-RPC，http://localhost:5100）。僅限開發環境的 CORS 讓 WASM
 #    dev server 能跨來源呼叫它。
-dotnet run --project Polhem.Northwind.Server
+dotnet run --project src/Polhem.Northwind.Server
 
 # 2. 網頁用戶端 dev server（Avalonia WASM，http://localhost:5200）
-dotnet run --project Polhem.Northwind.Browser
+dotnet run --project src/Polhem.Northwind.Browser
 ```
 
 開啟 <http://localhost:5200/>，接著 **Connect**（endpoint 已預填
@@ -54,7 +54,7 @@ CORS 政策（`PolhemDevWasm`，由 `IsDevelopment()` 把關），允許任何 `
 ## Release／發佈
 
 ```bash
-dotnet publish Polhem.Northwind.Browser -c Release -o <out>
+dotnet publish src/Polhem.Northwind.Browser -c Release -o <out>
 ```
 
 專案設定了 `<PublishTrimmed>false</PublishTrimmed>`：Polhem 以反射存取定義與訊息型別（JSON-RPC

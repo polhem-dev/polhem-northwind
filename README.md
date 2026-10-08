@@ -33,10 +33,10 @@ Two terminals from the repository root:
 
 ```bash
 # 1. Backend (JSON-RPC on http://localhost:5100)
-dotnet run --project Polhem.Northwind.Server
+dotnet run --project src/Polhem.Northwind.Server
 
 # 2. Desktop client
-dotnet run --project Polhem.Northwind.Desktop
+dotnet run --project src/Polhem.Northwind.Desktop
 ```
 
 Then in the app: **Connect** (the endpoint is pre-filled) → **Sign in** with one of the two seeded accounts:
@@ -56,11 +56,11 @@ models and views compiled to WebAssembly. It needs the `wasm-tools` workload
 
 ```bash
 # Web client dev server (Avalonia WASM on http://localhost:5200)
-dotnet run --project Polhem.Northwind.Browser
+dotnet run --project src/Polhem.Northwind.Browser
 ```
 
 Open <http://localhost:5200/> and connect / sign in the same way. See
-[`Polhem.Northwind.Browser/README.md`](Polhem.Northwind.Browser/README.md) for the WASM-specific wiring
+[`src/Polhem.Northwind.Browser/README.md`](src/Polhem.Northwind.Browser/README.md) for the WASM-specific wiring
 (localStorage endpoint, async connect, overlay dialogs, publish notes).
 
 ### Mobile clients (Avalonia iOS / Android)
@@ -77,17 +77,17 @@ Android the hardware / gesture back button unwinds record → tab before exiting
 
 ```bash
 # iOS simulator (needs the ios workload + Xcode; start a simulator first)
-dotnet build Polhem.Northwind.iOS -t:Run -f net10.0-ios -c Debug
+dotnet build src/Polhem.Northwind.iOS -t:Run -f net10.0-ios -c Debug
 
 # Android emulator (needs the Android SDK + JDK 17; start an AVD first)
-dotnet build Polhem.Northwind.Android -t:Run -f net10.0-android -c Debug
+dotnet build src/Polhem.Northwind.Android -t:Run -f net10.0-android -c Debug
 ```
 
 On the **Android emulator** the host machine is reached at `10.0.2.2` (not `localhost`), so set the
 endpoint to `http://10.0.2.2:5100/api`; the manifest enables cleartext HTTP for development. On the
 **iOS simulator** use `http://localhost:5100/api` (ATS allows arbitrary loads in dev).
 
-> The first server run creates `northwind.db` in the server project folder (`Polhem.Northwind.Server/`, where `.gitignore` covers it) and seeds a Northwind subset. Delete that file to reseed from scratch.
+> The first server run creates `northwind.db` in the server project folder (`src/Polhem.Northwind.Server/`, where `.gitignore` covers it) and seeds a Northwind subset. Delete that file to reseed from scratch.
 >
 > The desktop and mobile heads remember the endpoint and the API key in the framework's default `FileEndpointStorage`: a per-user folder named after the head's entry assembly (for example `Polhem.Northwind.Desktop`) under the local application data directory. Where that directory is on each platform is described on `FileEndpointStorage` in `Polhem.UI.Core`. The browser head keeps them in `localStorage` instead.
 
@@ -198,9 +198,9 @@ This is the whole argument in one table.
 | Login / session / encryption | **framework** | `SystemBusinessObject`, API pipeline |
 | **Order number, status transitions, at-least-one-line check, order total** | **application code** | `OrderBO` (the only business logic in the app) |
 
-The single C# business object, [`OrderBO`](Polhem.Northwind.Server/BusinessObjects/OrderBO.cs), overrides `GetNewData` and `DoBeforeSave` to add what a generic form cannot express. Its pure rules are factored into [`OrderRules`](Polhem.Northwind.Server/BusinessObjects/OrderRules.cs) and [`OrderDataSet`](Polhem.Northwind.Server/BusinessObjects/OrderDataSet.cs), kept free of database dependencies and separate from the orchestration.
+The single C# business object, [`OrderBO`](src/Polhem.Northwind.Server/BusinessObjects/OrderBO.cs), overrides `GetNewData` and `DoBeforeSave` to add what a generic form cannot express. Its pure rules are factored into [`OrderRules`](src/Polhem.Northwind.Server/BusinessObjects/OrderRules.cs) and [`OrderDataSet`](src/Polhem.Northwind.Server/BusinessObjects/OrderDataSet.cs), kept free of database dependencies and separate from the orchestration.
 
-Its two database queries live in [`IOrderRepository`](Polhem.Northwind.Server/Repositories/IOrderRepository.cs) / [`OrderRepository`](Polhem.Northwind.Server/Repositories/OrderRepository.cs), bound to the *same* registry entry as the business object — one progId, one business object, one repository. That is the style template for a form that needs data access beyond the generated CRUD: extend `IDataFormRepository` rather than replace it, derive from `DataFormRepository`, and let the business object ask for it by interface (`CreateFormRepository<IOrderRepository>()`). Keeping the SQL out of the business object is also what let these two queries route to the order's own company database instead of the one the business object happened to name.
+Its two database queries live in [`IOrderRepository`](src/Polhem.Northwind.Server/Repositories/IOrderRepository.cs) / [`OrderRepository`](src/Polhem.Northwind.Server/Repositories/OrderRepository.cs), bound to the *same* registry entry as the business object — one progId, one business object, one repository. That is the style template for a form that needs data access beyond the generated CRUD: extend `IDataFormRepository` rather than replace it, derive from `DataFormRepository`, and let the business object ask for it by interface (`CreateFormRepository<IOrderRepository>()`). Keeping the SQL out of the business object is also what let these two queries route to the order's own company database instead of the one the business object happened to name.
 
 ## Localization and the tenant customization layer
 
@@ -235,14 +235,14 @@ leaves the salesperson, shipper and freight off the master block.
 
 Two independent things gate the layer, and clearing either returns the demo to a plain packaged
 deployment with no other change: the session's customization code, and `PathOptions.CustomizePath`
-in [`NorthwindBackend`](Polhem.Northwind.Server/NorthwindBackend.cs). Companies map many-to-one onto
+in [`NorthwindBackend`](src/Polhem.Northwind.Server/NorthwindBackend.cs). Companies map many-to-one onto
 a customization code, so one code shared by many companies is the normal arrangement — the demo
 just happens to have one of each.
 
 Assembling all of this is the client's job, not the server's: the APIs serve definitions exactly
 as stored, and `FormDefinitionLoader` fetches both layers, applies the overlay, and hands the view
 a localized schema. One switch covers the whole client — `ClientInfo.UseDefinitionLoader`, on by
-default and set explicitly in [`App.axaml.cs`](Polhem.Northwind.UI/App.axaml.cs) — and the record
+default and set explicitly in [`App.axaml.cs`](src/Polhem.Northwind.UI/App.axaml.cs) — and the record
 form, the list and the lookup dialog all use `ClientInfo.DefinitionLoader`. With it off,
 a view renders the definitions as stored: English captions, and the packaged layout from
 `Define/FormLayout/` instead of the tenant's.
@@ -358,10 +358,11 @@ polhem-northwind/
 │   ├── MenuSettings.xml          the navigation menu (folders, order, captions)
 │   └── Language/{lang}/          localized captions, one file per progId
 ├── Customize/{customizeId}/      the tenant customization layer (same shape as Define/; holds only what it overrides)
-├── Polhem.Northwind.Server/         JSON-RPC backend, OrderBO, JSON seed data
-├── Polhem.Northwind.UI/             Avalonia shared UI (views, view models, navigation)
-├── Polhem.Northwind.Desktop/        desktop entry point (Avalonia.Desktop)
-├── Polhem.Northwind.Browser/        web entry point (Avalonia WASM)
-├── Polhem.Northwind.iOS/            iOS entry point (Avalonia.iOS)
-└── Polhem.Northwind.Android/        Android entry point (Avalonia.Android)
+└── src/
+    ├── Polhem.Northwind.Server/      JSON-RPC backend, OrderBO, JSON seed data
+    ├── Polhem.Northwind.UI/          Avalonia shared UI (views, view models, navigation)
+    ├── Polhem.Northwind.Desktop/     desktop entry point (Avalonia.Desktop)
+    ├── Polhem.Northwind.Browser/     web entry point (Avalonia WASM)
+    ├── Polhem.Northwind.iOS/         iOS entry point (Avalonia.iOS)
+    └── Polhem.Northwind.Android/     Android entry point (Avalonia.Android)
 ```

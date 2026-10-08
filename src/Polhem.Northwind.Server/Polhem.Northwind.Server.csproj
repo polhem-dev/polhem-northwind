@@ -25,7 +25,7 @@
     analyzer finds no definition files and reports nothing, and the build stays green.
   -->
   <PropertyGroup>
-    <PolhemDefinitionFilesGlob>..\Define\**\*.xml</PolhemDefinitionFilesGlob>
+    <PolhemDefinitionFilesGlob>..\..\Define\**\*.xml</PolhemDefinitionFilesGlob>
   </PropertyGroup>
 
   <ItemGroup>

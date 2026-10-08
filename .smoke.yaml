@@ -21,7 +21,7 @@ launch:
   app_name: Polhem.Northwind
   # Avalonia desktop ships a plain .NET executable (no .app bundle). Launch the built
   # host DLL via `dotnet` rather than `dotnet run` so we avoid the file-watch loop.
-  launch_cmd: dotnet Polhem.Northwind.Desktop/bin/Debug/net10.0/Polhem.Northwind.Desktop.dll
+  launch_cmd: dotnet src/Polhem.Northwind.Desktop/bin/Debug/net10.0/Polhem.Northwind.Desktop.dll
 
 flow:
   - step: take initial screenshot

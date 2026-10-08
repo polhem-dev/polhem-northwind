@@ -6,8 +6,8 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build-northwind-server",
-      "program": "${workspaceFolder}/Polhem.Northwind.Server/bin/Debug/net10.0/Polhem.Northwind.Server.dll",
-      "cwd": "${workspaceFolder}/Polhem.Northwind.Server",
+      "program": "${workspaceFolder}/src/Polhem.Northwind.Server/bin/Debug/net10.0/Polhem.Northwind.Server.dll",
+      "cwd": "${workspaceFolder}/src/Polhem.Northwind.Server",
       "console": "integratedTerminal",
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -20,8 +20,8 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "prep-northwind-desktop",
-      "program": "${workspaceFolder}/Polhem.Northwind.Desktop/bin/Debug/net10.0/Polhem.Northwind.Desktop.dll",
-      "cwd": "${workspaceFolder}/Polhem.Northwind.Desktop",
+      "program": "${workspaceFolder}/src/Polhem.Northwind.Desktop/bin/Debug/net10.0/Polhem.Northwind.Desktop.dll",
+      "cwd": "${workspaceFolder}/src/Polhem.Northwind.Desktop",
       "console": "internalConsole",
       "stopAtEntry": false
     },
@@ -31,7 +31,7 @@
       "type": "blazorwasm",
       "request": "launch",
       "preLaunchTask": "prep-northwind-browser",
-      "cwd": "${workspaceFolder}/Polhem.Northwind.Browser",
+      "cwd": "${workspaceFolder}/src/Polhem.Northwind.Browser",
       "url": "http://localhost:5200"
     }
   ],

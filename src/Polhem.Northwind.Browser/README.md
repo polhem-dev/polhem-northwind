@@ -2,7 +2,7 @@
 
 **English** | [繁體中文](README.zh-TW.md)
 
-The **web (WASM) head** of the [Polhem.Northwind](../README.md) demo. It compiles the shared
+The **web (WASM) head** of the [Polhem.Northwind](../../README.md) demo. It compiles the shared
 `Polhem.Northwind.UI` Avalonia application to WebAssembly with the **Avalonia Browser** backend
 and runs it in a browser — the same `App`, view models and views as
 [`Polhem.Northwind.Desktop`](../Polhem.Northwind.Desktop), just a different platform head
@@ -24,10 +24,10 @@ Two terminals from the repository root:
 ```bash
 # 1. Backend (JSON-RPC on http://localhost:5100). Dev-only CORS lets the WASM
 #    dev server call it cross-origin.
-dotnet run --project Polhem.Northwind.Server
+dotnet run --project src/Polhem.Northwind.Server
 
 # 2. Web client dev server (Avalonia WASM on http://localhost:5200)
-dotnet run --project Polhem.Northwind.Browser
+dotnet run --project src/Polhem.Northwind.Browser
 ```
 
 Open <http://localhost:5200/>, then **Connect** (endpoint pre-filled with
@@ -58,7 +58,7 @@ commented at its source:
 ## Release / publish
 
 ```bash
-dotnet publish Polhem.Northwind.Browser -c Release -o <out>
+dotnet publish src/Polhem.Northwind.Browser -c Release -o <out>
 ```
 
 The project sets `<PublishTrimmed>false</PublishTrimmed>`: Polhem reaches definition and message

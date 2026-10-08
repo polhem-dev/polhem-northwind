@@ -19,7 +19,7 @@ builder.Services.AddPolhemApiKeyGateCheck();
 
 // Dev-only CORS so the Avalonia WASM head (served by its own dev server on a different
 // localhost port) can call this JSON-RPC API cross-origin. Production should serve the WASM
-// same-origin from this host and drop the policy entirely (see Polhem.Northwind.Browser/README).
+// same-origin from this host and drop the policy entirely (see src/Polhem.Northwind.Browser/README).
 builder.Services.AddCors(options =>
     options.AddPolicy(DevWasmCorsPolicy, policy => policy
         .SetIsOriginAllowed(origin => Uri.TryCreate(origin, UriKind.Absolute, out var uri)
