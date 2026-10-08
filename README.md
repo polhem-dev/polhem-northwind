@@ -21,7 +21,7 @@ Master-data forms, master-detail orders with three lookups, framework organizati
 
 ## Running the demo
 
-Requires the **.NET 10 SDK**. The database is SQLite, created and seeded on first run — no setup.
+Requires the **.NET SDK 10.0.400 or later** (the analyzers in the `Polhem.Definition` package need its compiler). The database is SQLite, created and seeded on first run — no setup.
 
 ### From VS Code (recommended)
 
