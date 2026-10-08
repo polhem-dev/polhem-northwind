@@ -12,7 +12,7 @@ display_name: Polhem.Northwind
 
 prerequisites:
   - id: server
-    cwd: Polhem.Northwind.Server
+    cwd: src/Polhem.Northwind.Server
     cmd: dotnet run --configuration Debug --no-build
     ready_when: "Now listening on"
     timeout_seconds: 30
