@@ -7,7 +7,7 @@
       "command": "dotnet",
       "args": [
         "build",
-        "${workspaceFolder}/Polhem.Northwind.Server/Polhem.Northwind.Server.csproj",
+        "${workspaceFolder}/src/Polhem.Northwind.Server/Polhem.Northwind.Server.csproj",
         "--configuration",
         "Debug",
         "/consoleloggerparameters:NoSummary;ForceNoAlign"
@@ -21,7 +21,7 @@
       "command": "dotnet",
       "args": [
         "build",
-        "${workspaceFolder}/Polhem.Northwind.Desktop/Polhem.Northwind.Desktop.csproj",
+        "${workspaceFolder}/src/Polhem.Northwind.Desktop/Polhem.Northwind.Desktop.csproj",
         "--configuration",
         "Debug",
         "/consoleloggerparameters:NoSummary;ForceNoAlign"
@@ -57,7 +57,7 @@
       "command": "dotnet",
       "args": [
         "build",
-        "${workspaceFolder}/Polhem.Northwind.Browser/Polhem.Northwind.Browser.csproj",
+        "${workspaceFolder}/src/Polhem.Northwind.Browser/Polhem.Northwind.Browser.csproj",
         "--configuration",
         "Debug",
         "/consoleloggerparameters:NoSummary;ForceNoAlign"

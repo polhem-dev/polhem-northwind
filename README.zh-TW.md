@@ -33,10 +33,10 @@
 
 ```bash
 # 1. 後端（JSON-RPC，http://localhost:5100）
-dotnet run --project Polhem.Northwind.Server
+dotnet run --project src/Polhem.Northwind.Server
 
 # 2. 桌面前端
-dotnet run --project Polhem.Northwind.Desktop
+dotnet run --project src/Polhem.Northwind.Desktop
 ```
 
 接著在 app 中：**Connect**（endpoint 已預填）→ 以下列任一個種子帳號 **Sign in**：
@@ -56,12 +56,12 @@ dotnet run --project Polhem.Northwind.Desktop
 
 ```bash
 # 網頁前端 dev server（Avalonia WASM，http://localhost:5200）
-dotnet run --project Polhem.Northwind.Browser
+dotnet run --project src/Polhem.Northwind.Browser
 ```
 
 開啟 <http://localhost:5200/>，以相同方式連線 / 登入。WASM 專屬接線（localStorage endpoint、
 async 連線、overlay 對話框、publish 注意事項）見
-[`Polhem.Northwind.Browser/README.md`](Polhem.Northwind.Browser/README.zh-TW.md)。
+[`src/Polhem.Northwind.Browser/README.md`](src/Polhem.Northwind.Browser/README.zh-TW.md)。
 
 ### 行動前端（Avalonia iOS / Android）
 
@@ -74,16 +74,16 @@ iOS 上實機則另需 Apple Developer 簽章憑證。畫面會響應式重排 �
 
 ```bash
 # iOS 模擬器（需 ios workload + Xcode；先啟動一個模擬器）
-dotnet build Polhem.Northwind.iOS -t:Run -f net10.0-ios -c Debug
+dotnet build src/Polhem.Northwind.iOS -t:Run -f net10.0-ios -c Debug
 
 # Android 模擬器（需 Android SDK + JDK 17；先啟動一個 AVD）
-dotnet build Polhem.Northwind.Android -t:Run -f net10.0-android -c Debug
+dotnet build src/Polhem.Northwind.Android -t:Run -f net10.0-android -c Debug
 ```
 
 在 **Android 模擬器**，主機要用 `10.0.2.2`（非 `localhost`），endpoint 填 `http://10.0.2.2:5100/api`；
 manifest 已開 dev 明文 HTTP。在 **iOS 模擬器**則用 `http://localhost:5100/api`（ATS 於 dev 允許任意連線）。
 
-> 首次執行 server 會在 server 專案資料夾（`Polhem.Northwind.Server/`，已被 `.gitignore` 涵蓋）建立 `northwind.db` 並灌入 Northwind 子集。刪除該檔即可重新建表灌種子。
+> 首次執行 server 會在 server 專案資料夾（`src/Polhem.Northwind.Server/`，已被 `.gitignore` 涵蓋）建立 `northwind.db` 並灌入 Northwind 子集。刪除該檔即可重新建表灌種子。
 >
 > 桌面與行動前端用框架預設的 `FileEndpointStorage` 記住 endpoint 與 API 金鑰：本機應用程式資料目錄下、以該 head 的進入點組件命名的個人資料夾（例如 `Polhem.Northwind.Desktop`）。各平台的目錄位置見 `Polhem.UI.Core` 中 `FileEndpointStorage` 的說明。瀏覽器前端則改存在 `localStorage`。
 
@@ -194,9 +194,9 @@ Northwind 是正規化的關聯式 schema；polhem 是 `sys_rowid`（Guid）關�
 | 登入／工作階段／加密 | **框架** | `SystemBusinessObject`、API 管線 |
 | **單據編號、狀態轉移、至少一筆明細的檢查、訂單總額** | **應用程式碼** | `OrderBO`（全應用唯一的業務邏輯） |
 
-唯一的 C# 業務物件 [`OrderBO`](Polhem.Northwind.Server/BusinessObjects/OrderBO.cs) 覆寫 `GetNewData` 與 `DoBeforeSave`，補上一般表單無法表達的規則。其純規則拆到 [`OrderRules`](Polhem.Northwind.Server/BusinessObjects/OrderRules.cs) 與 [`OrderDataSet`](Polhem.Northwind.Server/BusinessObjects/OrderDataSet.cs)，不依賴資料庫、與協調流程分離。
+唯一的 C# 業務物件 [`OrderBO`](src/Polhem.Northwind.Server/BusinessObjects/OrderBO.cs) 覆寫 `GetNewData` 與 `DoBeforeSave`，補上一般表單無法表達的規則。其純規則拆到 [`OrderRules`](src/Polhem.Northwind.Server/BusinessObjects/OrderRules.cs) 與 [`OrderDataSet`](src/Polhem.Northwind.Server/BusinessObjects/OrderDataSet.cs)，不依賴資料庫、與協調流程分離。
 
-它的兩個資料庫查詢放在 [`IOrderRepository`](Polhem.Northwind.Server/Repositories/IOrderRepository.cs) / [`OrderRepository`](Polhem.Northwind.Server/Repositories/OrderRepository.cs)，與業務物件綁在**同一筆**註冊表項目上 —— 一支程式、一個業務物件、一個 Repository。這是「表單需要產生式 CRUD 以外的資料存取」時的樣式範本：**擴充** `IDataFormRepository` 而非取代它、衍生自 `DataFormRepository`，BO 端以介面取得（`CreateFormRepository<IOrderRepository>()`）。把 SQL 移出業務物件，也正是這兩個查詢得以路由到訂單自己的公司資料庫、而非業務物件當初隨手指名那個資料庫的原因。
+它的兩個資料庫查詢放在 [`IOrderRepository`](src/Polhem.Northwind.Server/Repositories/IOrderRepository.cs) / [`OrderRepository`](src/Polhem.Northwind.Server/Repositories/OrderRepository.cs)，與業務物件綁在**同一筆**註冊表項目上 —— 一支程式、一個業務物件、一個 Repository。這是「表單需要產生式 CRUD 以外的資料存取」時的樣式範本：**擴充** `IDataFormRepository` 而非取代它、衍生自 `DataFormRepository`，BO 端以介面取得（`CreateFormRepository<IOrderRepository>()`）。把 SQL 移出業務物件，也正是這兩個查詢得以路由到訂單自己的公司資料庫、而非業務物件當初隨手指名那個資料庫的原因。
 
 ## 在地化與租戶客製層
 
@@ -226,14 +226,14 @@ client 顯示哪種語言，取決於登入**帳號**的語系：`Login` 回傳 
 業務員、貨運商與運費。
 
 有兩個彼此獨立的開關管著這一層，**清掉任一個就回到純套裝部署、其餘行為完全不變**：
-session 的客製化代碼，以及 [`NorthwindBackend`](Polhem.Northwind.Server/NorthwindBackend.cs) 裡的
+session 的客製化代碼，以及 [`NorthwindBackend`](src/Polhem.Northwind.Server/NorthwindBackend.cs) 裡的
 `PathOptions.CustomizePath`。公司對客製化代碼是**多對一**，所以「多家公司共用一份客製」才是
 常態，demo 只是剛好各一。
 
 把這些組裝起來是 client 的工作、不是 server 的：API 一律把定義原樣送出，由
 `FormDefinitionLoader` 取回兩層、套用疊加，再把在地化後的 schema 交給畫面。整個 client 只有一個
 開關 —— `ClientInfo.UseDefinitionLoader`，預設開啟，demo 也在
-[`App.axaml.cs`](Polhem.Northwind.UI/App.axaml.cs) 裡明確設定 —— 單筆表單、清單與 lookup 對話框都使用
+[`App.axaml.cs`](src/Polhem.Northwind.UI/App.axaml.cs) 裡明確設定 —— 單筆表單、清單與 lookup 對話框都使用
 `ClientInfo.DefinitionLoader`。關掉時，畫面照原樣渲染定義：英文標題，版面也是
 `Define/FormLayout/` 裡的套裝版面而非租戶的。
 
@@ -348,10 +348,11 @@ polhem-northwind/
 │   ├── MenuSettings.xml          導航選單（資料夾、排序、標題）
 │   └── Language/{lang}/          在地化標題，每個 progId 一個檔
 ├── Customize/{customizeId}/      租戶客製層（結構與 Define/ 相同，只放要覆寫的檔）
-├── Polhem.Northwind.Server/         JSON-RPC 後端、OrderBO、JSON 種子資料
-├── Polhem.Northwind.UI/             Avalonia 共用 UI（views、view models、導航）
-├── Polhem.Northwind.Desktop/        桌面進入點（Avalonia.Desktop）
-├── Polhem.Northwind.Browser/        網頁進入點（Avalonia WASM）
-├── Polhem.Northwind.iOS/            iOS 進入點（Avalonia.iOS）
-└── Polhem.Northwind.Android/        Android 進入點（Avalonia.Android）
+└── src/
+    ├── Polhem.Northwind.Server/      JSON-RPC 後端、OrderBO、JSON 種子資料
+    ├── Polhem.Northwind.UI/          Avalonia 共用 UI（views、view models、導航）
+    ├── Polhem.Northwind.Desktop/     桌面進入點（Avalonia.Desktop）
+    ├── Polhem.Northwind.Browser/     網頁進入點（Avalonia WASM）
+    ├── Polhem.Northwind.iOS/         iOS 進入點（Avalonia.iOS）
+    └── Polhem.Northwind.Android/     Android 進入點（Avalonia.Android）
 ```
